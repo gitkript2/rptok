@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <title>Token Mock Minting</title>
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+            <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="text-center">Token Mock Minting</h1>
+                    <p>Your address: <span id="accountAddress"></span></p>
+                    <p>Test token address: <span id="testTokenAddress"></span></p>
+                    <p>Test NFT address: <span id="testItemAddress"></span></p>
+                    <hr />
+                    <div
+                        class="alert alert-primary alert-dismissible collapse"
+                        role="alert"
+                        id="alert"
+                    >
+                        <span id="alert-message"></span>
+                        <button
+                            type="button"
+                            class="close"
+                            data-dismiss="alert"
+                            aria-label="Close"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div id="nocontracts" style="display:none">
+                        <h4>Contracts not deployed</h4>
+                    </div>
+                    <div id="minting">
+                        <div>
+                            <h3>Mint ERC-20</h3>
+                            <form id="mintERC20Form" class="form-inline">
+                                <div class="form-group mx-sm-2">
+                                    <label
+                                        for="mintERC20Amount"
+                                        class="sr-only"
+                                    >
+                                        Amount
+                                    </label>
+                                    <input
+                                        class="form-control"
+                                        id="mintERC20Amount"
+                                        placeholder="Amount"
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary"
+                                >
+                                    Mint
+                                </button>
+                                <hr />
+                            </form>
+                            <p
+                                id="mintERC20Message"
+                                style="display:none"
+                            ></p>
+                        </div>
+                        <div>
+                            <h3>Mint ERC-721</h3>
+                            <form id="mintERC721Form" class="form-inline">
+                                <div class="form-group mx-sm-2">
+                                    <label
+                                        for="mintERC721Amount"
+                                        class="sr-only"
+                                    >
+                                        Amount
+                                    </label>
+                                    <input
+                                        class="form-control"
+                                        id="mintERC721Amount"
+                                        placeholder="Token Id"
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary"
+                                >
+                                    Mint
+                                </button>
+                                <hr />
+                            </form>
+                            <p
+                                id="mintERC721Message"
+                                style="display:none"
+                            ></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="main.js"></script>
+    </body>
+</html>
