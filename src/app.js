@@ -213,7 +213,5 @@ class App {
 }
 
 $(function() {
-  $(window).on("load", () => {
-    new App();
-  });
+  new App();
 });
