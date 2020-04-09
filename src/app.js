@@ -78,7 +78,7 @@ class App {
 
       this.setupHooks();
     }
-    
+
     return this.render();
   }
 
@@ -181,8 +181,8 @@ class App {
     $("#mintERC20Form").show();
     this.alertSuccess(
       "Successfully minted " +
-        ethers.utils.formatUnits(val, this.gld_units) +
-        " tokens"
+      ethers.utils.formatUnits(val, this.gld_units) +
+      " tokens"
     );
     this.render();
   }
@@ -212,8 +212,6 @@ class App {
   }
 }
 
-$(function() {
-  $(window).on("load", () => {
-    new App();
-  });
+$(function () {
+  $(window).on("DOMContentLoaded", new App);
 });
