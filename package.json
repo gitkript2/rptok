@@ -25,6 +25,6 @@
     "@openzeppelin/contracts": "^2.5.0",
     "bootstrap": "^4.4.1",
     "ethers": "4.0.44",
-    "jquery": "^3.4.1"
+    "jquery": "^3.5.0"
   }
 }
