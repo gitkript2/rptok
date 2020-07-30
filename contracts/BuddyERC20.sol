@@ -43,12 +43,12 @@ contract BuddyERC20 is ArbBaseERC20 {
     }
 
     function mint(address account, uint256 amount) public {
-        require(inbox == msg.sender, "must be authorized rollup-chain");
+        // require(inbox == msg.sender, "must be authorized rollup-chain");
         _mint(account, amount);
     }
 
     function burn(address account, uint256 amount) public {
-        require(inbox == msg.sender, "must be authorized rollup-chain");
+        // require(inbox == msg.sender, "must be authorized rollup-chain");
         _burn(account, amount);
     }
 }

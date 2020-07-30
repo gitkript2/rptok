@@ -9,6 +9,9 @@ require("bootstrap/js/dist/tab.js");
 require("bootstrap/js/dist/alert.js");
 require("bootstrap/js/dist/util.js");
 
+const ArbErc20Factory = require("arb-provider-ethers/dist/lib/abi/ArbErc20Factory")
+  .ArbErc20Factory;
+
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 class App {
@@ -45,42 +48,114 @@ class App {
   }
 
   async initContracts() {
-    var network = await this.provider.getNetwork();
+    console.log("here yo");
+      const buddyContract = require("../build/contracts/BuddyERC20.json");
+      const arberc20Contract = require("../build/contracts/ArbERC20.json");
+      
+      // metamask:
+      // const provider =  new ethers.providers.Web3Provider(window.ethereum);
+      let wallet = this.provider.getSigner(0);
+      let key = "0x979f020f6f6f71577c09db93ba944c89945f10fade64cfc7eb26137d5816fb76";
+      this.walletAddress = await wallet.getAddress();
+      console.log(this.walletAddress);
 
-    const testToken = require("../build/contracts/TestToken.json");
-    const testItem = require("../build/contracts/TestItem.json");
 
-    let chainId = network.chainId.toString();
+        let buddyInterfaceX = new ethers.Contract(
+          '0xf9dEB127F8C85D215c8F5471E074793c53635F1b',
+          buddyContract.abi,
+          this.provider
+        );
+      //   let buddyInterface2 = new ethers.Contract(
+      //     '0xf9dEB127F8C85D215c8F5471E074793c53635F1b',
+      //     arberc20Contract.abi,
+      //     provider
+      //   );
+    
+       const ethereumProvider = new ethers.providers.JsonRpcProvider("http://localhost:7545")
+       const ethereumWallet = new ethers.Wallet(key, ethereumProvider);
+       const buddyInterface = new ethers.Contract('0xf9dEB127F8C85D215c8F5471E074793c53635F1b', buddyContract.abi, ethereumWallet)
+       
+       // this.contracts.TestItem = arbERC0Interface;
+       // this.contracts.TestToken = buddyInterface;
+       // this.gld_units = await this.contracts.TestToken.decimals();
 
-    let wallet = this.provider.getSigner(0);
-    this.walletAddress = await wallet.getAddress();
-
-    if (chainId in testItem.networks) {
-      let testItemAddress = testItem.networks[chainId].address;
-      let testTokenAddress = testToken.networks[chainId].address;
-
-      let testTokenContractRaw = new ethers.Contract(
-        testTokenAddress,
-        testToken.abi,
-        this.provider
-      );
-
-      let testItemContractRaw = new ethers.Contract(
-        testItemAddress,
-        testItem.abi,
-        this.provider
-      );
-
-      this.contracts.TestToken = testTokenContractRaw.connect(wallet);
-      this.contracts.TestItem = testItemContractRaw.connect(wallet);
+      this.contracts.TestToken = buddyInterface.connect(wallet);
+      
 
       this.gld_units = await this.contracts.TestToken.decimals();
 
-      this.setupHooks();
-    }
+      const ethBalance = await this.contracts.TestToken.balanceOf(
+        this.walletAddress
+      );
+      console.log(ethBalance);
 
-    return this.render();
+
+
+      const arbProvider = new ethers.providers.JsonRpcProvider("http://localhost:8547")
+      const arbWallet = new ethers.Wallet(key, arbProvider);
+      const arbERC0Interface = new ethers.Contract('0xf9dEB127F8C85D215c8F5471E074793c53635F1b', arberc20Contract.abi, arbWallet)
+      this.contracts.ArbToken = arbERC0Interface.connect(arbWallet);
+      
+      const ethBalance2 = await this.contracts.ArbToken.balanceOf(
+        this.walletAddress
+      );
+
+    //   let arbTestTokenContractRaw = ArbErc20Factory.connect(
+    //   '0xf9dEB127F8C85D215c8F5471E074793c53635F1b',
+    //   arbWallet
+    // );
+
+    //   this.contracts.ArbToken = arbTestTokenContractRaw.connect(arbWallet);
+      
+    //   const ethBalance2 = await this.contracts.ArbToken.balanceOf(
+    //     this.walletAddress
+    //   );
+      
+      // console.log(ethBalance2);
+
+      this.setupHooks();
+
+      return this.render();
   }
+
+  // async initContracts() {
+
+  //   var network = await this.provider.getNetwork();
+
+  //   // const testToken = require("../build/contracts/TestToken.json");
+  //   // const testItem = require("../build/contracts/TestItem.json");
+
+  //   let chainId = network.chainId.toString();
+
+  //   let wallet = this.provider.getSigner(0);
+  //   this.walletAddress = await wallet.getAddress();
+
+  //   if (chainId in testItem.networks) {
+  //     let testItemAddress = testItem.networks[chainId].address;
+  //     let testTokenAddress = testToken.networks[chainId].address;
+
+  //     let testTokenContractRaw = new ethers.Contract(
+  //       testTokenAddress,
+  //       testToken.abi,
+  //       this.provider
+  //     );
+
+  //     let testItemContractRaw = new ethers.Contract(
+  //       testItemAddress,
+  //       testItem.abi,
+  //       this.provider
+  //     );
+
+  //     this.contracts.TestToken = testTokenContractRaw.connect(wallet);
+  //     this.contracts.TestItem = testItemContractRaw.connect(wallet);
+
+  //     this.gld_units = await this.contracts.TestToken.decimals();
+
+  //     this.setupHooks();
+  //   }
+
+  //   return this.render();
+  // }
 
   setupHooks() {
     $("#mintERC20Form").submit(event => {
@@ -184,30 +259,6 @@ class App {
       ethers.utils.formatUnits(val, this.gld_units) +
       " tokens"
     );
-    this.render();
-  }
-
-  async mintERC721() {
-    this.clearAlerts();
-    let tokenId = parseInt($("#mintERC721Amount").val());
-    $("#mintERC721Amount").val("");
-    $("#mintERC721Form").hide();
-    $("#mintERC721Message").html("Creating mint transaction");
-    $("#mintERC721Message").show();
-    let tx;
-    try {
-      tx = await this.contracts.TestItem.mintItem(
-        this.walletAddress,
-        tokenId
-      );
-    } catch (e) {
-      return this.handleFailure(e);
-    }
-    $("#mintERC721Message").html("Token is minting");
-    await tx.wait();
-    $("#mintERC721Message").hide();
-    $("#mintERC721Form").show();
-    this.alertSuccess("Successfully minted token " + tokenId);
     this.render();
   }
 }

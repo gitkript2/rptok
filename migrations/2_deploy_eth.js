@@ -19,9 +19,12 @@ module.exports = async function(deployer, network) {
   // console.log("chain: "+x);
   // console.log("inbox: "+y);
 
-  // var num = new web3.utils.BN("999999909900000.0");
+  var num = new web3.utils.BN("99999999909900000.0");
 
-  // myAdd = "0xc7711f36b2C13E00821fFD9EC54B04A60AEfbd1b";
-  // await instance.mint(myAdd, num);
+  myAdd = "0xc7711f36b2C13E00821fFD9EC54B04A60AEfbd1b";
+  await instance.mint(myAdd, num);
+
+  var balance = await instance.balanceOf(myAdd);
+  console.log("balance: "+ balance);
 };
 ``
