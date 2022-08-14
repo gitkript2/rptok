@@ -22,7 +22,7 @@
     "webpack-dev-server": "~3.10.2"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^2.5.0",
+    "@openzeppelin/contracts": "^4.7.2",
     "bootstrap": "^4.4.1",
     "ethers": "4.0.44",
     "jquery": "^3.5.0"
